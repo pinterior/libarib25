@@ -188,12 +188,7 @@ inline arm::neon2<S> rot1_sub(const arm::neon2<S> &v) {
 
 template<size_t S>
 inline arm::neon2<S> rot1_add_dec(const arm::neon2<S> &v) {
-	uint32x4_t a0 = v.value0();
-	uint32x4_t a1 = v.value1();
-
-	uint32x4_t d0 = vcgeq_s32(vreinterpretq_s32_u32(a0), vdupq_n_s32(0));
-	uint32x4_t d1 = vcgeq_s32(vreinterpretq_s32_u32(a1), vdupq_n_s32(0));
-	return v + v + v + arm::neon2<S>(d0, d1);
+	return rot<1>(v) + v - arm::neon2<S>(1);
 }
 
 }

@@ -96,6 +96,11 @@ struct cipher {
 	}
 };
 
+}
+
+#include "multi2_neon3.h"
+
+namespace multi2 {
 
 inline work_key_type schedule(const data_key_type &dk, const system_key_type &sk) {
 	typedef pi<uint32_t> p;
@@ -196,9 +201,8 @@ inline void decrypt_cbc_ofb(uint8_t *buf, size_t n, const iv_type &iv, const wor
 
 #elif defined(__ARM_NEON__)
 	if (MULTI2_LIKELY(n == 184)) {
-		decrypt_block<arm::neon2<7> >(buf, n, state, key, round);
-		decrypt_block<arm::neon2<8> >(buf, n, state, key, round);
-		decrypt_block<arm::neon2<8> >(buf, n, state, key, round);
+		decrypt_block<arm::neon3<11> >(buf, n, state, key, round);
+		decrypt_block<arm::neon3<12> >(buf, n, state, key, round);
 		return;
 	}
 	while (block_size<arm::neon2<8> >() <= n) {
